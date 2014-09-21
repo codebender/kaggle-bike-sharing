@@ -1,0 +1,6 @@
+.DS_Store
+.Rproj.user
+.Rhistory
+.RData
+kaggle-bike-sharing.Rproj
+Output/*.csv

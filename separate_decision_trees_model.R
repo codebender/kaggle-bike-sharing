@@ -15,11 +15,16 @@ test$month <- factor(format(as.POSIXct(test$datetime, format="%Y-%m-%d %H:%M"), 
 test$weekday <- factor(format(as.POSIXct(test$datetime, format="%Y-%m-%d %H:%M"), format="%u"))
 test$year <- factor(format(as.POSIXct(test$datetime, format="%Y-%m-%d %H:%M"), format="%y"))
 
-fit <- rpart(count ~ hour + month + year + weekday + weather + atemp +
+reg_fit <- rpart(registered ~ hour + month + year + weekday + weather + atemp +
                workingday + holiday + windspeed + humidity + season, data=train, control=rpart.control(minsplit=2, cp=0))
 
-Prediction <- predict(fit, test, type = "matrix")
+reg_prediction <- predict(reg_fit, test, type = "matrix")
+
+casual_fit <- rpart(casual ~ hour + month + year + weekday + weather + atemp +
+                   workingday + holiday + windspeed + humidity + season, data=train, control=rpart.control(minsplit=2, cp=0))
+
+casual_prediction <- predict(casual_fit, test, type = "matrix")
 
 # Create submission dataframe and output to file
-submit <- data.frame(datetime = test$datetime, count = Prediction)
-write.csv(submit, file = "Output/decision_tree.csv", row.names = FALSE)
+submit <- data.frame(datetime = test$datetime, count = reg_prediction + casual_prediction)
+write.csv(submit, file = "Output/separate_decision_trees.csv", row.names = FALSE)

@@ -16,4 +16,6 @@
 
     ```R
     install.packages('rpart')
+    install.packages('randomForest')
+    install.packages('party')
     ```

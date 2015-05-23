@@ -38,18 +38,21 @@ featureEngineer <- function(df) {
 train <- featureEngineer(train)
 test <- featureEngineer(test)
 
+### Shuffle Training dataset
+train <- train[sample(nrow(train)),]
+
 #####RANDOM FOREST STARTS HERE#########
 #variables
-myNtree = 500
+myNtree = 1000
 myMtry = 5
 myImportance = TRUE
 #set the random seed
-set.seed(415)
+set.seed(1337)
 #fit and predict casual
-casualFit <- randomForest(casual ~ hour + year + humidity + temp + atemp + workingday + weekday, data=train, ntree=myNtree, mtry=myMtry, importance=myImportance)
+casualFit <- randomForest(casual ~ hour + year + humidity + temp + atemp + workingday + weekday, data=train, ntree=myNtree, mtry=myMtry, importance=myImportance, do.trace=50)
 test$casual <- predict(casualFit, test)
 #fit and predict registered
-registeredFit <- randomForest(registered ~ hour + year + season + weather + workingday + humidity + weekday + atemp, data=train, ntree=myNtree, mtry=myMtry, importance=myImportance)
+registeredFit <- randomForest(registered ~ hour + year + season + weather + workingday + humidity + weekday + atemp, data=train, ntree=myNtree, mtry=myMtry, importance=myImportance, do.trace=50)
 test$registered <- predict(registeredFit, test)
 #add both columns into final count, round to whole number
 test$count <- round(test$casual + test$registered, 0)
@@ -60,4 +63,4 @@ plot(test$count)
 
 ####create output file from dataset test with predictions
 submit <- data.frame (datetime = test$datetime, count = test$count)
-write.csv(submit, file = "Output/randomForest_Prediction.csv", row.names=FALSE)
+write.csv(submit, file = "Output/randomForest_Prediction_2.csv", row.names=FALSE)

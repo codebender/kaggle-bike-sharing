@@ -44,7 +44,7 @@ train <- train[sample(nrow(train)),]
 #####RANDOM FOREST STARTS HERE#########
 #variables
 myNtree = 1000
-myMtry = 4
+myMtry = 5
 myImportance = TRUE
 #set the random seed
 set.seed(1337)
@@ -63,4 +63,4 @@ plot(test$count)
 
 ####create output file from dataset test with predictions
 submit <- data.frame (datetime = test$datetime, count = test$count)
-write.csv(submit, file = "Output/randomForest_Prediction_3.csv", row.names=FALSE)
+write.csv(submit, file = "Output/randomForest_Prediction_4.csv", row.names=FALSE)
